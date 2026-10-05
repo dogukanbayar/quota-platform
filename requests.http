@@ -1,0 +1,35 @@
+### VS Code "REST Client" eklentisi ile çalıştırın
+@base = http://localhost:8085/api/v1
+
+### Planlar
+GET {{base}}/plans
+
+### Kullanıcı oluştur (planType opsiyonel, varsayılan FREE)
+POST {{base}}/users
+Content-Type: application/json
+
+{ "fullName": "Deniz Kaya", "email": "deniz@example.com", "planType": "FREE" }
+
+### Kota harca
+POST {{base}}/users/1/usage
+Content-Type: application/json
+
+{ "operation": "/v1/summarize", "units": 5 }
+
+### Abonelik + bu ayki kullanım
+GET {{base}}/users/1/subscription
+
+### Kullanım geçmişi
+GET {{base}}/users/1/usage/logs?page=0&size=10
+
+### Paket değiştir (upgrade / downgrade)
+PUT {{base}}/users/1/subscription/plan
+Content-Type: application/json
+
+{ "planType": "PRO" }
+
+### Aboneliği sonlandır (demo) ve yenile
+POST {{base}}/users/1/subscription/expire
+
+###
+POST {{base}}/users/1/subscription/renew

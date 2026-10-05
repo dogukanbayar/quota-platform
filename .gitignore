@@ -1,0 +1,13 @@
+target/
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.DS_Store
+.env
+*.log
+*.zip
+.scannerwork/
+.sonar/
+HELP.md

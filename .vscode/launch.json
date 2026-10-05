@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "QuotaPlatformApplication",
+      "request": "launch",
+      "mainClass": "com.saasplatform.quota.QuotaPlatformApplication",
+      "projectName": "quota-platform"
+    }
+  ]
+}
