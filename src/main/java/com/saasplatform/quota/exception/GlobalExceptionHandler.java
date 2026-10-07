@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex, HttpServletRequest request) {
+        LOG.warn("Business rule rejected request: code={}, status={}, path={}", ex.getCode(), ex.getStatus().value(), request.getRequestURI());
         return build(ex.getStatus(), ex.getCode(), ex.getMessage(), request, null);
     }
 

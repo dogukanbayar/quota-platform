@@ -24,6 +24,8 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsageService {
 
     private static final String SUBSCRIPTION_RESOURCE = "Subscription for user";
+    private static final Logger LOG = LoggerFactory.getLogger(UsageService.class);
 
     private final SubscriptionRepository subscriptionRepository;
     private final UsageLogRepository usageLogRepository;
@@ -68,6 +71,7 @@ public class UsageService {
         }
 
         UsageLog saved = usageLogRepository.save(new UsageLog(subscription, request.operation().trim(), units, period, now));
+        LOG.debug("Quota consumed: userId={}, units={}, used={}/{}", userId, units, used + units, limit);
         return usageMapper.toUsageResponse(saved, used + units, limit);
     }
 

@@ -357,6 +357,21 @@ cp .env.example .env     # .env repoya girmez (.gitignore)
 
 ---
 
+## 📝 Loglama
+
+SLF4J / Logback kullanılır. Kişisel veri (e-posta vb.) loglanmaz, yalnızca ID, plan ve miktar yazılır.
+
+| Seviye | Ne loglanır |
+|---|---|
+| `INFO` | Kullanıcı kaydı, paket değişikliği, abonelik yenileme/sonlandırma |
+| `WARN` | İş kuralı reddi (`QUOTA_EXCEEDED`, `SUBSCRIPTION_EXPIRED`, `PLAN_DOWNGRADE_NOT_ALLOWED`, …), `GlobalExceptionHandler` tarafından merkezi olarak |
+| `ERROR` | Beklenmeyen hatalar (yığın izi ile) |
+| `DEBUG` | Her kota harcaması |
+
+Seviyeyi değiştirmek için: `LOGGING_LEVEL_COM_SAASPLATFORM_QUOTA=DEBUG ./mvnw spring-boot:run`
+
+---
+
 ## 🛠️ Sorun giderme
 
 | Belirti | Neden | Çözüm |
