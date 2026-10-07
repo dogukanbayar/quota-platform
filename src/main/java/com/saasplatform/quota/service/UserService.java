@@ -16,11 +16,15 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
@@ -48,7 +52,9 @@ public class UserService {
         Instant now = clock.instant();
         AppUser user = new AppUser(request.fullName().trim(), email, now);
         user.setSubscription(new Subscription(user, plan, now, SubscriptionPeriods.endFrom(now)));
-        return userMapper.toResponse(userRepository.save(user), now);
+        AppUser saved = userRepository.save(user);
+        LOG.info("User registered: id={}, plan={}", saved.getId(), planType);
+        return userMapper.toResponse(saved, now);
     }
 
     @Transactional(readOnly = true)

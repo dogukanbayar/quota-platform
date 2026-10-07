@@ -16,11 +16,15 @@ import com.saasplatform.quota.repository.UsageLogRepository;
 import com.saasplatform.quota.util.SubscriptionPeriods;
 import java.time.Clock;
 import java.time.Instant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SubscriptionService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SubscriptionService.class);
 
     private final SubscriptionRepository subscriptionRepository;
     private final UsageLogRepository usageLogRepository;
@@ -71,6 +75,7 @@ public class SubscriptionService {
             throw new PlanDowngradeNotAllowedException(current.getType(), target, used, targetPlan.getMonthlyLimit());
         }
         subscription.setPlan(targetPlan);
+        LOG.info("Plan changed: userId={}, {} -> {}, usedThisMonth={}", userId, current.getType(), target, used);
         return subscriptionMapper.toResponse(subscription, subscription.effectiveStatus(now), used, period);
     }
 
@@ -83,6 +88,7 @@ public class SubscriptionService {
             throw new InvalidOperationException("Subscription is still active and cannot be renewed yet");
         }
         subscription.renew(now, SubscriptionPeriods.endFrom(now));
+        LOG.info("Subscription renewed: userId={}", userId);
         return toResponse(subscription, now);
     }
 
@@ -92,6 +98,7 @@ public class SubscriptionService {
         Subscription subscription = lockByUserId(userId);
         Instant now = clock.instant();
         subscription.expire(now);
+        LOG.info("Subscription expired manually: userId={}", userId);
         return toResponse(subscription, now);
     }
 
